@@ -121,10 +121,11 @@ func main() {
 				}
 
 				return c.Send(chat, reply, topicSendOptions)
+			} else {
+				return c.Send("Бот поддерживается только в супергруппах с топиками")
 			}
-			else {
-				return c.Send()
-			}
+		} else {
+			return c.Send("Бот поддерживается только в супергруппах")
 		}
 		return nil
 	})
