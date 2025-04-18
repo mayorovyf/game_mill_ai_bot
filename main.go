@@ -1,48 +1,25 @@
 package main
 
 import (
-	"context"
 	"fmt"
+	"game_mill_ai_bot/ai"
+	"game_mill_ai_bot/config"
+	"game_mill_ai_bot/db"
+	"game_mill_ai_bot/telegram"
 	"log"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 
-	"github.com/joho/godotenv"
 	"gopkg.in/telebot.v3"
 
 	openai "github.com/sashabaranov/go-openai"
 )
 
-// Функция запроса к OpenAI
-func getChatResponse(client *openai.Client, input string) (string, error) {
-	resp, err := client.CreateChatCompletion(
-		context.Background(),
-		openai.ChatCompletionRequest{
-			Model: openai.GPT3Dot5Turbo,
-			Messages: []openai.ChatCompletionMessage{
-				{
-					Role:    "user",
-					Content: input,
-				},
-			},
-		},
-	)
-
-	if err != nil {
-		return "", err
-	}
-
-	return resp.Choices[0].Message.Content, nil
-}
-
 func main() {
 
-	// Загрузка конфигурации
-	if err := godotenv.Load(".env"); err != nil {
-		log.Fatal("Ошибка загрузки .env файла")
-	}
+	config.LoadEnv()
+	db.ConnectDB()
 
 	botApiKey := os.Getenv("TG_BOT_API_KEY")
 	openaiKey := os.Getenv("OPENAI_API_KEY")
@@ -68,36 +45,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	bot.Handle("/start", func(c telebot.Context) error {
-		chat := c.Chat()
-		message := c.Message()
-		topicSendOptions := &telebot.SendOptions{
-			ThreadID: message.ThreadID,
-		}
-
-		// Сохраняем цепочку ошибок
-		var err error
-
-		if chat.Type == telebot.ChatSuperGroup {
-			if e := c.Send("Сообщение из супергруппы"); e != nil {
-				err = e
-			}
-		}
-
-		if message.ThreadID != 0 {
-			if e := c.Send("Сообщение из топика"); e != nil {
-				err = e
-			}
-
-			if e := c.Send("ID топика: " + strconv.Itoa(message.ThreadID)); e != nil {
-				err = e
-			}
-
-			bot.Send(chat, "Сообщение отправлено в топик откуда получена команда", topicSendOptions)
-		}
-
-		return err
-	})
+	bot.Handle("/start", telegram.StartHandler)
 
 	bot.Handle("/ai", func(c telebot.Context) error {
 		message := c.Message()
@@ -107,7 +55,7 @@ func main() {
 			return c.Send("Бот работает только в супергруппах")
 		}
 		if message.ThreadID == 0 {
-			return c.Send("Пожалуйста, используй команду в топике (thread)")
+			return c.Send("Пожалуйста, используй команду в топике")
 		}
 		if prompt == "" {
 			return c.Send("Пожалуйста, укажи запрос после команды, например:\n`/ai Что такое черная дыра?`", &telebot.SendOptions{ParseMode: telebot.ModeMarkdown})
@@ -120,7 +68,7 @@ func main() {
 
 		c.Send("Думаю... 🤖", sendOpts)
 
-		reply, err := getChatResponse(aiClient, prompt)
+		reply, err := ai.GetChatResponse(aiClient, prompt)
 		if err != nil {
 			return c.Send(fmt.Sprintf("Ошибка: %v", err), sendOpts)
 		}
