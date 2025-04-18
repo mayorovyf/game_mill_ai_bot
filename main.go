@@ -100,20 +100,33 @@ func main() {
 	})
 
 	bot.Handle("/ai", func(c telebot.Context) error {
+		chat := c.Chat()
+		message := c.Message()
+		topicSendOptions := &telebot.SendOptions{
+			ThreadID: message.ThreadID,
+		}
 		prompt := strings.TrimSpace(c.Message().Payload)
 
-		if prompt == "" {
-			return c.Send("Пожалуйста, укажи запрос после команды, например:\n`/ai Что такое черная дыра?`", &telebot.SendOptions{ParseMode: telebot.ModeMarkdown})
+		if chat.Type == telebot.ChatSuperGroup {
+			if message.ThreadID != 0 {
+				if prompt == "" {
+					return c.Send("Пожалуйста, укажи запрос после команды, например:\n`/ai Что такое черная дыра?`", &telebot.SendOptions{ParseMode: telebot.ModeMarkdown})
+				}
+
+				c.Send(chat, "Думаю... 🤖", topicSendOptions)
+
+				reply, err := getChatResponse(aiClient, prompt)
+				if err != nil {
+					return c.Send(fmt.Sprintf("Ошибка: %v", err))
+				}
+
+				return c.Send(chat, reply, topicSendOptions)
+			}
+			else {
+				return c.Send()
+			}
 		}
-
-		c.Send("Думаю... 🤖")
-
-		reply, err := getChatResponse(aiClient, prompt)
-		if err != nil {
-			return c.Send(fmt.Sprintf("Ошибка: %v", err))
-		}
-
-		return c.Send(reply)
+		return nil
 	})
 
 	log.Println("Бот запущен...")
