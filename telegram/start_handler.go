@@ -3,6 +3,7 @@ package telegram
 import (
 	"game_mill_ai_bot/db"
 	"game_mill_ai_bot/models"
+	"github.com/sashabaranov/go-openai"
 	"gopkg.in/telebot.v3"
 	"strconv"
 )
@@ -13,9 +14,11 @@ func StartHandler(c telebot.Context) error {
 	}
 
 	user := models.User{
-		ID:        strconv.FormatInt(c.Sender().ID, 10),
-		Username:  c.Sender().Username,
-		Cloudlets: "0",
+		ID:           strconv.FormatInt(c.Sender().ID, 10),
+		Username:     c.Sender().Username,
+		Cloudlets:    0,
+		Adminlvl:     0,
+		CurrentModel: openai.GPT3Dot5Turbo,
 	}
 
 	exists, err := db.UserExists(user.ID)
