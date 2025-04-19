@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func AddCloudletsHandler(c telebot.Context) error {
+func ChangeCloudletsHandler(c telebot.Context) error {
 	message := c.Message()
 
 	if c.Chat().Type != telebot.ChatSuperGroup {
@@ -25,7 +25,7 @@ func AddCloudletsHandler(c telebot.Context) error {
 	if err != nil {
 		return c.Reply("Ошибка при проверке уровня доступа")
 	}
-	if adminLvl != 99 {
+	if adminLvl < 99 {
 		return c.Reply("У вас недостаточно прав для выполнения этой команды")
 	}
 
@@ -34,15 +34,12 @@ func AddCloudletsHandler(c telebot.Context) error {
 
 	args := c.Args()
 	if len(args) != 1 {
-		return c.Reply("Укажите количество облачков, например: /add 10 или /add -5")
+		return c.Reply("Укажите количество облачков, например: /ch 10 или /ch -5")
 	}
 
 	amount, err := strconv.Atoi(args[0])
 	if err != nil {
 		return c.Reply("Неверное значение облачков")
-	}
-	if amount == 0 {
-		return nil
 	}
 
 	// Проверка существования пользователя

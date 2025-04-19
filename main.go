@@ -37,7 +37,10 @@ func main() {
 	bot.Handle("/start", telegram.StartHandler)
 	bot.Handle("/ai", telegram.AiHendler)
 	bot.Handle("/profile", telegram.ProfileHandler)
-	bot.Handle("/add", telegram.AddCloudletsHandler)
+	bot.Handle("/ch", telegram.ChangeCloudletsHandler)
+	bot.Handle("/create_team", telegram.CreateTeamHandler)
+	bot.Handle("/team_info", telegram.TeamInfoHandler)
+	bot.Handle("/set_team_name", telegram.SetTeamNameHandler)
 
 	log.Println("Бот запущен...")
 	bot.Start()

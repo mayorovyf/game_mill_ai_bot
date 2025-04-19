@@ -20,6 +20,7 @@ func ProfileHandler(c telebot.Context) error {
 
 	exist, _ := db.UserExists(userId)
 	if !exist {
+		c.Reply("Вы не зарегистрированы")
 		return nil
 	}
 

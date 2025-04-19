@@ -14,8 +14,7 @@ func UpdateUser(user *models.User) error {
 	collection := DB.Collection("users")
 
 	filter := bson.M{"id": user.ID}
-	update := bson.M{"$set": user}
 
-	_, err := collection.UpdateOne(ctx, filter, update)
+	_, err := collection.ReplaceOne(ctx, filter, user)
 	return err
 }
