@@ -10,10 +10,10 @@ func ProfileHandler(c telebot.Context) error {
 	message := c.Message()
 
 	if c.Chat().Type != telebot.ChatSuperGroup {
-		return c.Send("Бот работает только в супергруппах")
+		return c.Reply("Бот работает только в супергруппах")
 	}
 	if message.ThreadID == 0 {
-		return c.Send("Пожалуйста, используй команду в топике")
+		return c.Reply("Пожалуйста, используй команду в топике")
 	}
 
 	userId := strconv.FormatInt(c.Sender().ID, 10)
@@ -25,7 +25,10 @@ func ProfileHandler(c telebot.Context) error {
 
 	user, _ := db.GetUserById(userId)
 
-	reply := "id: " + userId + "\n" + "admin lvl: " + strconv.FormatInt(int64(user.Adminlvl), 10) + "\n" + "облачка: " + strconv.FormatInt(int64(user.Cloudlets), 10)
+	reply := "Профиль пользователя @" + c.Sender().Username + "\n" +
+		"id: " + userId + "\n" +
+		"admin lvl: " + strconv.Itoa(user.Adminlvl) + "\n" +
+		"облачка: " + strconv.Itoa(user.Cloudlets)
 
 	return c.Reply(reply)
 }

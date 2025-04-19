@@ -14,6 +14,7 @@ import (
 func main() {
 
 	config.LoadEnv()
+	config.LoadAIConfig()
 	db.ConnectDB()
 
 	botApiKey := os.Getenv("TG_BOT_API_KEY")
@@ -36,6 +37,7 @@ func main() {
 	bot.Handle("/start", telegram.StartHandler)
 	bot.Handle("/ai", telegram.AiHendler)
 	bot.Handle("/profile", telegram.ProfileHandler)
+	bot.Handle("/add", telegram.AddCloudletsHandler)
 
 	log.Println("Бот запущен...")
 	bot.Start()

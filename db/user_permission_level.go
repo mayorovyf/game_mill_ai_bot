@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func UserPermissionLevel(userId int) (int, error) {
+func UserPermissionLevel(userId string) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

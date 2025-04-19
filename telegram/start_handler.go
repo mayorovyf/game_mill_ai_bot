@@ -28,8 +28,8 @@ func StartHandler(c telebot.Context) error {
 
 	err = db.CreateUser(user)
 	if err != nil {
-		return c.Send(" Ошибка при регистрации пользователя:\n" + err.Error())
+		return c.Reply(" Ошибка при регистрации пользователя:\n" + err.Error())
 	}
 
-	return c.Send(" Добро пожаловать!")
+	return c.Reply(" Добро пожаловать!")
 }

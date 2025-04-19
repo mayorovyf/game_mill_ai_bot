@@ -16,4 +16,5 @@ func LoadAIConfig() {
 	}
 
 	AiClient = openai.NewClient(openaiKey)
+	log.Println("OpenAI клиент успешно инициализирован")
 }
