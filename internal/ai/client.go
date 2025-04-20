@@ -11,7 +11,7 @@ func GetChatResponse(client *openai.Client, input string) (string, error) {
 	resp, err := client.CreateChatCompletion(
 		context.Background(),
 		openai.ChatCompletionRequest{
-			Model: openai.GPT4oMini,
+			Model: "gpt-4o-mini-search-preview",
 			Messages: []openai.ChatCompletionMessage{
 				{
 					Role:    "user",
