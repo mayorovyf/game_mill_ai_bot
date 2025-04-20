@@ -30,7 +30,7 @@ func AddToTeamHandler(c telebot.Context) error {
 		return c.Reply("Ошибка при поиске пользователя: " + err.Error())
 	}
 	if user == nil {
-		return c.Reply("Пользователь с юзернеймом @" + username + " не найден")
+		return c.Reply("Пользователь с юзернеймом @" + username + " не зарегистрирован в боте")
 	}
 
 	// Получение команды
