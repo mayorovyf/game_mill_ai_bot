@@ -9,6 +9,7 @@ import (
 
 func SetTeamNameHandler(c telebot.Context) error {
 	message := c.Message()
+	const RequiredAdminLevel = 99
 
 	// Проверка: только в супергруппах и в топиках
 	if c.Chat().Type != telebot.ChatSuperGroup {
@@ -31,7 +32,7 @@ func SetTeamNameHandler(c telebot.Context) error {
 	if err != nil {
 		return c.Reply("Ошибка при проверке уровня доступа")
 	}
-	if adminLvl < 99 {
+	if adminLvl < RequiredAdminLevel {
 		return c.Reply("У вас недостаточно прав для изменения названия")
 	}
 
@@ -41,7 +42,7 @@ func SetTeamNameHandler(c telebot.Context) error {
 
 	team, err := repository.GetTeamById(chatID, threadID)
 	if err != nil {
-		return c.Reply("Ошибка при получении команды: " + err.Error())
+		return c.Reply("Ошибка при получении команды")
 	}
 	if team == nil {
 		return c.Reply("Команда не найдена")

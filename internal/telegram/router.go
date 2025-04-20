@@ -10,4 +10,5 @@ func LoadTgRoutes() {
 	bot.Handle("/create_team", handlers.CreateTeamHandler)
 	bot.Handle("/team_info", handlers.TeamInfoHandler)
 	bot.Handle("/set_team_name", handlers.SetTeamNameHandler)
+	bot.Handle("/add_to_team", handlers.AddToTeamHandler)
 }
