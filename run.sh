@@ -7,7 +7,7 @@ PROJECT_DIR="."
 cd "$PROJECT_DIR" || { echo "❌ Не удалось перейти в директорию проекта"; exit 1; }
 
 echo "🔨 Сборка..."
-go build cmd/app/main.go
+go build cmd/main.go
 if [ $? -ne 0 ]; then
   echo "❌ Сборка завершилась с ошибкой"
   exit 1
