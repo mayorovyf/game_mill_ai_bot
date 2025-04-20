@@ -1,8 +1,8 @@
-package telegram
+package handlers
 
 import (
-	"game_mill_ai_bot/db"
-	"game_mill_ai_bot/models"
+	"game_mill_ai_bot/internal/db/repository"
+	"game_mill_ai_bot/internal/models"
 	"github.com/sashabaranov/go-openai"
 	"gopkg.in/telebot.v3"
 	"strconv"
@@ -21,12 +21,12 @@ func StartHandler(c telebot.Context) error {
 		CurrentModel: openai.GPT3Dot5Turbo,
 	}
 
-	exists, err := db.UserExists(user.ID)
+	exists, err := repository.UserExists(user.ID)
 	if exists {
 		return nil
 	}
 
-	err = db.CreateUser(user)
+	err = repository.CreateUser(user)
 	if err != nil {
 		return c.Reply(" Ошибка при регистрации пользователя:\n" + err.Error())
 	}

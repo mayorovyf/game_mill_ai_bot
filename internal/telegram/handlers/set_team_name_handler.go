@@ -1,7 +1,7 @@
-package telegram
+package handlers
 
 import (
-	"game_mill_ai_bot/db"
+	"game_mill_ai_bot/internal/db/repository"
 	"gopkg.in/telebot.v3"
 	"strconv"
 	"strings"
@@ -27,7 +27,7 @@ func SetTeamNameHandler(c telebot.Context) error {
 
 	// Проверка прав (допустим, нужен 99 уровень)
 	adminID := strconv.FormatInt(c.Sender().ID, 10)
-	adminLvl, err := db.UserPermissionLevel(adminID)
+	adminLvl, err := repository.UserPermissionLevel(adminID)
 	if err != nil {
 		return c.Reply("Ошибка при проверке уровня доступа")
 	}
@@ -39,7 +39,7 @@ func SetTeamNameHandler(c telebot.Context) error {
 	chatID := strconv.FormatInt(c.Chat().ID, 10)
 	threadID := strconv.FormatInt(int64(message.ThreadID), 10)
 
-	team, err := db.GetTeamById(chatID, threadID)
+	team, err := repository.GetTeamById(chatID, threadID)
 	if err != nil {
 		return c.Reply("Ошибка при получении команды: " + err.Error())
 	}
@@ -50,7 +50,7 @@ func SetTeamNameHandler(c telebot.Context) error {
 	// Обновляем название и сохраняем команду
 	team.Name = newName
 
-	err = db.UpdateTeam(*team)
+	err = repository.UpdateTeam(*team)
 	if err != nil {
 		return c.Reply("Ошибка при обновлении команды: " + err.Error())
 	}

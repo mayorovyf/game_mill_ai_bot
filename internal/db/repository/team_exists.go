@@ -1,7 +1,8 @@
-package db
+package repository
 
 import (
 	"context"
+	"game_mill_ai_bot/internal/db"
 	"time"
 )
 
@@ -10,7 +11,7 @@ func TeamExists(id string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	collection := DB.Collection("teams")
+	collection := db.DB.Collection("teams")
 	filter := map[string]interface{}{"id": id}
 
 	count, err := collection.CountDocuments(ctx, filter)

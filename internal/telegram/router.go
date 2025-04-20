@@ -1,0 +1,13 @@
+package telegram
+
+import "game_mill_ai_bot/internal/telegram/handlers"
+
+func LoadTgRoutes() {
+	bot.Handle("/start", handlers.StartHandler)
+	bot.Handle("/ai", handlers.AiHendler)
+	bot.Handle("/profile", handlers.ProfileHandler)
+	bot.Handle("/ch", handlers.ChangeCloudletsHandler)
+	bot.Handle("/create_team", handlers.CreateTeamHandler)
+	bot.Handle("/team_info", handlers.TeamInfoHandler)
+	bot.Handle("/set_team_name", handlers.SetTeamNameHandler)
+}

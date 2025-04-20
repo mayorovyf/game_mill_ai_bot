@@ -1,7 +1,7 @@
-package telegram
+package handlers
 
 import (
-	"game_mill_ai_bot/db"
+	"game_mill_ai_bot/internal/db/repository"
 	"gopkg.in/telebot.v3"
 	"strconv"
 )
@@ -18,13 +18,13 @@ func ProfileHandler(c telebot.Context) error {
 
 	userId := strconv.FormatInt(c.Sender().ID, 10)
 
-	exist, _ := db.UserExists(userId)
+	exist, _ := repository.UserExists(userId)
 	if !exist {
 		c.Reply("Вы не зарегистрированы")
 		return nil
 	}
 
-	user, _ := db.GetUserById(userId)
+	user, _ := repository.GetUserById(userId)
 
 	reply := "Профиль пользователя @" + c.Sender().Username + "\n" +
 		"id: " + userId + "\n" +

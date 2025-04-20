@@ -1,8 +1,8 @@
-package telegram
+package handlers
 
 import (
-	"game_mill_ai_bot/db"
-	"game_mill_ai_bot/models"
+	"game_mill_ai_bot/internal/db/repository"
+	"game_mill_ai_bot/internal/models"
 	"gopkg.in/telebot.v3"
 	"strconv"
 )
@@ -18,7 +18,7 @@ func CreateTeamHandler(c telebot.Context) error {
 	}
 
 	adminId := strconv.FormatInt(c.Sender().ID, 10)
-	adminLvl, err := db.UserPermissionLevel(adminId)
+	adminLvl, err := repository.UserPermissionLevel(adminId)
 	if err != nil {
 		return c.Reply("Ошибка при проверке уровня доступа")
 	}
@@ -35,7 +35,7 @@ func CreateTeamHandler(c telebot.Context) error {
 		Lvl:     1, // стартовый уровень
 	}
 
-	err = db.CreateTeam(team)
+	err = repository.CreateTeam(team)
 	if err != nil {
 		return c.Reply("Ошибка при создании команды: " + err.Error())
 	}

@@ -1,8 +1,9 @@
-package db
+package repository
 
 import (
 	"context"
-	"game_mill_ai_bot/models"
+	"game_mill_ai_bot/internal/db"
+	"game_mill_ai_bot/internal/models"
 	"time"
 )
 
@@ -19,7 +20,7 @@ func CreateTeam(team models.Team) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	collection := DB.Collection("teams")
+	collection := db.DB.Collection("teams")
 	_, err = collection.InsertOne(ctx, team)
 	return err
 }

@@ -1,26 +1,27 @@
-package db
+package repository
 
 import (
 	"context"
-	"game_mill_ai_bot/models"
+	"game_mill_ai_bot/internal/db"
+	"game_mill_ai_bot/internal/models"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )
 
-func UserPermissionLevel(userId string) (int, error) {
+func GetUserById(userId string) (*models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	collection := DB.Collection("users")
+	collection := db.DB.Collection("users")
 
 	var user models.User
 	err := collection.FindOne(ctx, bson.M{"id": userId}).Decode(&user)
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
-			return 0, nil // пользователь не найден
+			return nil, nil // пользователь не найден
 		}
-		return 0, err // другая ошибка
+		return nil, err // другая ошибка
 	}
-	return user.Adminlvl, nil
+	return &user, nil
 }

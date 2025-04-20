@@ -1,7 +1,7 @@
-package telegram
+package handlers
 
 import (
-	"game_mill_ai_bot/db"
+	"game_mill_ai_bot/internal/db/repository"
 	"gopkg.in/telebot.v3"
 	"strconv"
 )
@@ -19,7 +19,7 @@ func TeamInfoHandler(c telebot.Context) error {
 	chatID := strconv.FormatInt(c.Chat().ID, 10)
 	threadID := strconv.FormatInt(int64(message.ThreadID), 10)
 
-	team, err := db.GetTeamById(chatID, threadID)
+	team, err := repository.GetTeamById(chatID, threadID)
 	if err != nil {
 		return c.Reply("Ошибка при получении команды: " + err.Error())
 	}

@@ -1,7 +1,7 @@
-package telegram
+package handlers
 
 import (
-	"game_mill_ai_bot/db"
+	"game_mill_ai_bot/internal/db/repository"
 	"gopkg.in/telebot.v3"
 	"strconv"
 )
@@ -21,7 +21,7 @@ func ChangeCloudletsHandler(c telebot.Context) error {
 	adminId := strconv.FormatInt(c.Sender().ID, 10)
 
 	// Проверка прав администратора
-	adminLvl, err := db.UserPermissionLevel(adminId)
+	adminLvl, err := repository.UserPermissionLevel(adminId)
 	if err != nil {
 		return c.Reply("Ошибка при проверке уровня доступа")
 	}
@@ -43,7 +43,7 @@ func ChangeCloudletsHandler(c telebot.Context) error {
 	}
 
 	// Проверка существования пользователя
-	exist, err := db.UserExists(targetUserId)
+	exist, err := repository.UserExists(targetUserId)
 	if err != nil {
 		return c.Reply("Ошибка при проверке пользователя")
 	}
@@ -52,7 +52,7 @@ func ChangeCloudletsHandler(c telebot.Context) error {
 	}
 
 	// Получаем пользователя
-	user, err := db.GetUserById(targetUserId)
+	user, err := repository.GetUserById(targetUserId)
 	if err != nil {
 		return c.Reply("Ошибка при получении пользователя")
 	}
@@ -65,7 +65,7 @@ func ChangeCloudletsHandler(c telebot.Context) error {
 	user.Cloudlets = newBalance
 
 	// Обновляем в базе
-	err = db.UpdateUser(user)
+	err = repository.UpdateUser(user)
 	if err != nil {
 		return c.Reply("Ошибка при обновлении пользователя")
 	}
