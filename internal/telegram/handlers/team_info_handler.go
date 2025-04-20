@@ -27,10 +27,25 @@ func TeamInfoHandler(c telebot.Context) error {
 		return c.Reply("Команда не найдена")
 	}
 
-	text := "Название: " + team.Name + "\n" +
-		"ID: " + team.Id + "\n" +
-		"Участники: " + strconv.Itoa(len(team.Members)) + "\n" +
-		"Уровень: " + strconv.Itoa(team.Lvl)
+	// Получаем список пользователей
+	users, err := repository.GetUsersByIds(team.Members)
+	if err != nil {
+		return c.Reply("Ошибка при получении участников: " + err.Error())
+	}
+
+	// Формируем список участников с @username
+	memberList := ""
+	for _, user := range users {
+		if user.Username != "" {
+			memberList += "@" + user.Username + "\n"
+		} else {
+			memberList += "(без username)\n"
+		}
+	}
+
+	// Собираем финальный текст
+	text := "[" + strconv.Itoa(team.Lvl) + "] " + team.Name + " (" + team.Id + ")\n\n" +
+		"Участники (" + strconv.Itoa(len(users)) + "):\n" + memberList
 
 	return c.Reply(text)
 }

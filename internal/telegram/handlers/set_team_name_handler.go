@@ -26,6 +26,11 @@ func SetTeamNameHandler(c telebot.Context) error {
 	}
 	newName := strings.Join(args, " ")
 
+	// Ограничение длины названия
+	if len([]rune(newName)) >= 16 {
+		return c.Reply("Название слишком длинное. Максимум 15 символов." + string([]rune(newName)))
+	}
+
 	// Проверка прав (допустим, нужен 99 уровень)
 	adminID := strconv.FormatInt(c.Sender().ID, 10)
 	adminLvl, err := repository.UserPermissionLevel(adminID)
