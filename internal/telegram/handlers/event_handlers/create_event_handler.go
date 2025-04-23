@@ -27,7 +27,7 @@ func CreateEventHandler(c telebot.Context) error {
 		Date:         time.Now(),        // date
 		Subscribers:  []string{},
 	}
-	if err := r_event.CreateEvent(event); err != nil {
+	if err := r_event.AddEvent(event); err != nil {
 		return c.Reply("Ошибка при создании события: " + err.Error())
 	}
 

@@ -1,3 +1,4 @@
+// internal/config/load_env.go
 package config
 
 import (
@@ -5,6 +6,7 @@ import (
 	"log"
 )
 
+// загрузка .env файла
 func LoadEnv() {
 	if err := godotenv.Load(); err != nil {
 		log.Println("Файл .env не найден")

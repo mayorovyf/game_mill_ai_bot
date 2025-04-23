@@ -1,3 +1,4 @@
+// internal/ai/client.go
 package ai
 
 import (
@@ -5,6 +6,7 @@ import (
 	"github.com/sashabaranov/go-openai"
 )
 
+// временная реализация
 // Функция запроса к OpenAI
 func GetChatResponse(client *openai.Client, input string) (string, error) {
 

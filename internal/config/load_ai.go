@@ -1,3 +1,4 @@
+// internal/config/load_ai.go
 package config
 
 import (
@@ -8,7 +9,7 @@ import (
 
 var AiClient *openai.Client
 
-// Инициализируем OpenAI клиент
+// Инициализация OpenAI клиента
 func LoadAIConfig() {
 	openaiKey := os.Getenv("OPENAI_API_KEY")
 	if openaiKey == "" {
