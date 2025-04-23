@@ -1,6 +1,7 @@
 package telegram
 
 import (
+	"game_mill_ai_bot/internal/notifier"
 	"gopkg.in/telebot.v3"
 	"log"
 	"os"
@@ -31,5 +32,9 @@ func LoadTgBot() {
 	LoadTgRoutes()
 
 	log.Println("Бот запущен...")
+	log.Println("Уведомитель запущен...")
+
+	notifier.StartEventNotifier(bot)
+
 	bot.Start()
 }
