@@ -1,7 +1,8 @@
-package handlers
+package team_handlers
 
 import (
-	"game_mill_ai_bot/internal/db/repository"
+	"game_mill_ai_bot/internal/db/repository/r_team"
+	"game_mill_ai_bot/internal/db/repository/r_user"
 	"game_mill_ai_bot/internal/models"
 	"gopkg.in/telebot.v3"
 	"strconv"
@@ -18,7 +19,7 @@ func CreateTeamHandler(c telebot.Context) error {
 	}
 
 	adminId := strconv.FormatInt(c.Sender().ID, 10)
-	adminLvl, err := repository.UserPermissionLevel(adminId)
+	adminLvl, err := r_user.UserPermissionLevel(adminId)
 	if err != nil {
 		return c.Reply("Ошибка при проверке уровня доступа")
 	}
@@ -35,7 +36,7 @@ func CreateTeamHandler(c telebot.Context) error {
 		Lvl:     1, // стартовый уровень
 	}
 
-	err = repository.CreateTeam(team)
+	err = r_team.CreateTeam(team)
 	if err != nil {
 		return c.Reply("Ошибка при создании команды: " + err.Error())
 	}

@@ -1,7 +1,8 @@
-package handlers
+package team_handlers
 
 import (
-	"game_mill_ai_bot/internal/db/repository"
+	"game_mill_ai_bot/internal/db/repository/r_team"
+	"game_mill_ai_bot/internal/db/repository/r_user"
 	"gopkg.in/telebot.v3"
 	"strconv"
 )
@@ -19,7 +20,7 @@ func TeamInfoHandler(c telebot.Context) error {
 	chatID := strconv.FormatInt(c.Chat().ID, 10)
 	threadID := strconv.FormatInt(int64(message.ThreadID), 10)
 
-	team, err := repository.GetTeamById(chatID, threadID)
+	team, err := r_team.GetTeamById(chatID, threadID)
 	if err != nil {
 		return c.Reply("Ошибка при получении команды: " + err.Error())
 	}
@@ -28,7 +29,7 @@ func TeamInfoHandler(c telebot.Context) error {
 	}
 
 	// Получаем список пользователей
-	users, err := repository.GetUsersByIds(team.Members)
+	users, err := r_user.GetUsersByIds(team.Members)
 	if err != nil {
 		return c.Reply("Ошибка при получении участников: " + err.Error())
 	}

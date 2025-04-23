@@ -1,7 +1,7 @@
-package handlers
+package main_handlers
 
 import (
-	"game_mill_ai_bot/internal/db/repository"
+	"game_mill_ai_bot/internal/db/repository/r_user"
 	"game_mill_ai_bot/internal/models"
 	"github.com/sashabaranov/go-openai"
 	"gopkg.in/telebot.v3"
@@ -21,12 +21,12 @@ func StartHandler(c telebot.Context) error {
 		CurrentModel: openai.GPT3Dot5Turbo,
 	}
 
-	exists, err := repository.UserExists(user.ID)
+	exists, err := r_user.UserExists(user.ID)
 	if exists {
 		return nil
 	}
 
-	err = repository.CreateUser(user)
+	err = r_user.CreateUser(user)
 	if err != nil {
 		return c.Reply(" Ошибка при регистрации пользователя:\n" + err.Error())
 	}

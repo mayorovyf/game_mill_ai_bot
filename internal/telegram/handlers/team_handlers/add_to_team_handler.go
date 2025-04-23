@@ -1,7 +1,8 @@
-package handlers
+package team_handlers
 
 import (
-	"game_mill_ai_bot/internal/db/repository"
+	"game_mill_ai_bot/internal/db/repository/r_team"
+	"game_mill_ai_bot/internal/db/repository/r_user"
 	"gopkg.in/telebot.v3"
 	"strconv"
 	"strings"
@@ -25,7 +26,7 @@ func AddToTeamHandler(c telebot.Context) error {
 	username := strings.TrimPrefix(args[0], "@")
 
 	// Получение пользователя по username
-	user, err := repository.GetUserByUsername(username)
+	user, err := r_user.GetUserByUsername(username)
 	if err != nil {
 		return c.Reply("Ошибка при поиске пользователя: " + err.Error())
 	}
@@ -36,7 +37,7 @@ func AddToTeamHandler(c telebot.Context) error {
 	// Получение команды
 	chatID := strconv.FormatInt(c.Chat().ID, 10)
 	threadID := strconv.FormatInt(int64(message.ThreadID), 10)
-	team, err := repository.GetTeamById(chatID, threadID)
+	team, err := r_team.GetTeamById(chatID, threadID)
 	if err != nil || team == nil {
 		return c.Reply("Команда не найдена")
 	}
@@ -51,7 +52,7 @@ func AddToTeamHandler(c telebot.Context) error {
 	// Добавляем в команду
 	team.Members = append(team.Members, user.ID)
 
-	err = repository.UpdateTeam(*team)
+	err = r_team.UpdateTeam(*team)
 	if err != nil {
 		return c.Reply("Ошибка при добавлении пользователя в команду: " + err.Error())
 	}

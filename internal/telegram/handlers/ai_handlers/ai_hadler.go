@@ -1,9 +1,9 @@
-package handlers
+package ai_handlers
 
 import (
 	"game_mill_ai_bot/internal/ai"
 	"game_mill_ai_bot/internal/config"
-	"game_mill_ai_bot/internal/db/repository"
+	"game_mill_ai_bot/internal/db/repository/r_user"
 	"gopkg.in/telebot.v3"
 	"strconv"
 	"strings"
@@ -27,7 +27,7 @@ func AiHendler(c telebot.Context) error {
 	userId := strconv.FormatInt(c.Sender().ID, 10)
 
 	// Проверка существования
-	exists, err := repository.UserExists(userId)
+	exists, err := r_user.UserExists(userId)
 	if err != nil {
 		return c.Reply("Ошибка при проверке пользователя")
 	}
@@ -36,7 +36,7 @@ func AiHendler(c telebot.Context) error {
 	}
 
 	// Получение пользователя
-	user, err := repository.GetUserById(userId)
+	user, err := r_user.GetUserById(userId)
 	if err != nil {
 		return c.Reply("Ошибка при получении пользователя")
 	}
@@ -61,7 +61,7 @@ func AiHendler(c telebot.Context) error {
 
 	// Списание 1 облачка
 	user.Cloudlets -= 1
-	err = repository.UpdateUser(user)
+	err = r_user.UpdateUser(user)
 	if err != nil {
 		return c.Reply("Ошибка при обновлении баланса пользователя", sendOpts)
 	}

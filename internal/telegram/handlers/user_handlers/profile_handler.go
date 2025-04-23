@@ -1,7 +1,7 @@
-package handlers
+package user_handlers
 
 import (
-	"game_mill_ai_bot/internal/db/repository"
+	"game_mill_ai_bot/internal/db/repository/r_user"
 	"gopkg.in/telebot.v3"
 	"strconv"
 )
@@ -18,13 +18,13 @@ func ProfileHandler(c telebot.Context) error {
 
 	userId := strconv.FormatInt(c.Sender().ID, 10)
 
-	exist, _ := repository.UserExists(userId)
+	exist, _ := r_user.UserExists(userId)
 	if !exist {
 		c.Reply("Вы не зарегистрированы")
 		return nil
 	}
 
-	user, _ := repository.GetUserById(userId)
+	user, _ := r_user.GetUserById(userId)
 
 	reply := "Профиль пользователя @" + c.Sender().Username + "\n" +
 		"id: " + userId + "\n" +

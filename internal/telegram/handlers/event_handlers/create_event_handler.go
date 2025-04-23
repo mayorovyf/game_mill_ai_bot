@@ -48,7 +48,7 @@ func CreateEventHandler(c telebot.Context) error {
 	sb.WriteString("Description2: " + event.Description2 + " (`description2`)\n")
 	sb.WriteString("TypeID: " + event.TypeID + " (`type_id`)\n")
 	sb.WriteString("Type: " + event.Type + " (`type`)\n")
-	sb.WriteString("Date: " + event.Date.Format("2006-01-02 15:04") + " (`date`)\n\n")
+	sb.WriteString("Date: " + event.Date.Format("YYYY-MM-DD hh:mm") + " (`date`)\n\n")
 	sb.WriteString("Чтобы изменить поле, используй:\n")
 	sb.WriteString("/set_event " + eventID + " tag новое_значение\n")
 	sb.WriteString("Пример: /set_event " + eventID + " title НовоеНазвание\n")
