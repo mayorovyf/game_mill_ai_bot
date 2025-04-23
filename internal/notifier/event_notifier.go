@@ -1,8 +1,8 @@
 package notifier
 
 import (
-	"game_mill_ai_bot/internal/db/repository"
 	"game_mill_ai_bot/internal/db/repository/r_event"
+	"game_mill_ai_bot/internal/db/repository/r_user"
 	"gopkg.in/telebot.v3"
 	"strconv"
 	"time"
@@ -14,7 +14,7 @@ func StartEventNotifier(bot *telebot.Bot) {
 			now := time.Now()
 			events, _ := r_event.GetEventsBefore(now)
 			for _, evt := range events {
-				users, _ := repository.GetUsersByIds(evt.Subscribers)
+				users, _ := r_user.GetUsersByIds(evt.Subscribers)
 
 				mentions := ""
 				for _, u := range users {
