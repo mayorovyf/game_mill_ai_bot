@@ -9,15 +9,18 @@ import (
 	"time"
 )
 
-// заменяет старое событие на новое с сохранением id
+// заменяем старое событие на новое с сохранением id
 func UpdateEvent(event *models.Event) error {
 
-	// таймаут 5 сек
+	// ограничиваем запрос к бд в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// получаем коллекцию
+	collection := db.DB.Collection("events")
+
 	// замена события в бд
-	_, err := db.DB.Collection("events").ReplaceOne(ctx, bson.M{"id": event.ID}, event)
+	_, err := collection.ReplaceOne(ctx, bson.M{"id": event.ID}, event)
 
 	return err
 }

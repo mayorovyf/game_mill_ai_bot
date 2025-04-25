@@ -8,10 +8,10 @@ import (
 	"time"
 )
 
-// добавление события в бд
+// добавляем событие в бд
 func AddEvent(event *models.Event) error {
 
-	// таймаут 5 сек
+	// ограничиваем запрос к бд в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 

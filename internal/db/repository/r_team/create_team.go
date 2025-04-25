@@ -1,3 +1,4 @@
+// internal/db/repository/r_team/create_team.go
 package r_team
 
 import (
@@ -7,9 +8,12 @@ import (
 	"time"
 )
 
-// CreateTeam добавляет новую команду, если её ещё нет
+// создание команды
 func CreateTeam(team models.Team) error {
-	exists, err := TeamExists(team.Id)
+
+	// проверяем существует ли команда
+	exists, err := TeamExist(team.Id, team.ChatId)
+
 	if err != nil {
 		return err
 	}
@@ -17,10 +21,11 @@ func CreateTeam(team models.Team) error {
 		return nil // команда уже существует — не добавляем
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	// ограничиваем запрос к бд в 5 сек
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	collection := db.DB.Collection("teams")
-	_, err = collection.InsertOne(ctx, team)
+	// добавляем команду
+	_, err = db.DB.Collection("teams").InsertOne(ctx, team)
 	return err
 }

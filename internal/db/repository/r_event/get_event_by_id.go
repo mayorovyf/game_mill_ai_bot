@@ -10,10 +10,10 @@ import (
 	"time"
 )
 
-// получение события по id
+// получаем событие по id
 func GetEventById(eventID string) (*models.Event, error) {
 
-	// таймаут 5 сек
+	// ограничиваем запрос к бд в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
@@ -21,7 +21,6 @@ func GetEventById(eventID string) (*models.Event, error) {
 	var event models.Event
 	err := db.DB.Collection("events").FindOne(ctx, bson.M{"id": eventID}).Decode(&event)
 
-	// обработка случая когда событие не найдено
 	if err == mongo.ErrNoDocuments {
 		return nil, err
 	}
