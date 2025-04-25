@@ -4,6 +4,8 @@ package r_team
 import (
 	"context"
 	"game_mill_ai_bot/internal/db"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )
 
@@ -14,20 +16,24 @@ func TeamExist(id string, chat_id string) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	// получаем коллекцию
-	collection := db.DB.Collection("teams")
-
 	// создаём фильтр
-	filter := map[string]interface{}{
+	filter := bson.M{
 		"id":      id,
 		"chat_id": chat_id,
 	}
 
+	// получаем коллекцию
+	collection := db.DB.Collection("teams")
+
 	// проверяем наличие
-	count, err := collection.CountDocuments(ctx, filter)
+	err := collection.FindOne(ctx, filter).Err()
 
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return false, nil
+		}
 		return false, err
 	}
-	return count > 0, nil
+
+	return true, nil
 }

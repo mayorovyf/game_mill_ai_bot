@@ -1,3 +1,4 @@
+// internal/db/repository/r_user/user_exist.go
 package r_user
 
 import (
@@ -8,19 +9,30 @@ import (
 	"time"
 )
 
-// UserExists проверяет, существует ли пользователь с указанным ID
+// проверям, существует ли пользователь с таким id
 func UserExists(userID string) (bool, error) {
+
+	// ограничиваем запрос к бд в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// получаем коллекцию
 	collection := db.DB.Collection("users")
 
-	err := collection.FindOne(ctx, bson.M{"id": userID}).Err()
-	if err == mongo.ErrNoDocuments {
-		return false, nil
+	// создаём фильтр
+	filter := bson.M{
+		"id": userID,
 	}
+
+	// ищем пользователя
+	err := collection.FindOne(ctx, filter).Err()
+
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return false, nil
+		}
 		return false, err
 	}
+
 	return true, nil
 }

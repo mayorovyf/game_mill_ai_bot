@@ -1,3 +1,4 @@
+// internal/db/repository/r_user/add_user.go
 package r_user
 
 import (
@@ -7,20 +8,18 @@ import (
 	"time"
 )
 
-// CreateUser добавляет нового пользователя, если его ещё нет
+// добавляем пользователя
 func CreateUser(user models.User) error {
-	exists, err := UserExists(user.ID)
-	if err != nil {
-		return err
-	}
-	if exists {
-		return nil // уже есть — не добавляем
-	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	// ограничиваем запрос к бд в 5 сек
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// получаем коллекцию
 	collection := db.DB.Collection("users")
-	_, err = collection.InsertOne(ctx, user)
+
+	// добавляем пользователя
+	_, err := collection.InsertOne(ctx, user)
+
 	return err
 }

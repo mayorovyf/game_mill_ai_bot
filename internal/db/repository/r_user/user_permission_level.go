@@ -1,3 +1,4 @@
+// internal/db/repository/r_user/user_permission_level.go
 package r_user
 
 import (
@@ -9,19 +10,28 @@ import (
 	"time"
 )
 
+// !!! Планируется удалить !!!
+
+// получаем уровень доступа у пользователя
 func UserPermissionLevel(userId string) (int, error) {
+
+	// ограничиваем запрос к бд в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// получаем коллекцию
 	collection := db.DB.Collection("users")
 
+	// ищем пользователя
 	var user models.User
 	err := collection.FindOne(ctx, bson.M{"id": userId}).Decode(&user)
+
 	if err != nil {
 		if err == mongo.ErrNoDocuments {
 			return 0, nil // пользователь не найден
 		}
-		return 0, err // другая ошибка
+		return 0, err
 	}
+
 	return user.Adminlvl, nil
 }

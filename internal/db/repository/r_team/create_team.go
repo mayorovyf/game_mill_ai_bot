@@ -11,21 +11,15 @@ import (
 // создание команды
 func CreateTeam(team models.Team) error {
 
-	// проверяем существует ли команда
-	exists, err := TeamExist(team.Id, team.ChatId)
-
-	if err != nil {
-		return err
-	}
-	if exists {
-		return nil // команда уже существует — не добавляем
-	}
-
 	// ограничиваем запрос к бд в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// получаем коллекцию
+	collection := db.DB.Collection("teams")
+
 	// добавляем команду
-	_, err = db.DB.Collection("teams").InsertOne(ctx, team)
+	_, err := collection.InsertOne(ctx, team)
+
 	return err
 }

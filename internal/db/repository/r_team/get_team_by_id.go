@@ -5,6 +5,7 @@ import (
 	"context"
 	"game_mill_ai_bot/internal/db"
 	"game_mill_ai_bot/internal/models"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"time"
 )
@@ -20,7 +21,7 @@ func GetTeamById(chatId, threadId string) (*models.Team, error) {
 	collection := db.DB.Collection("teams")
 
 	// создаём фильтр
-	filter := map[string]interface{}{
+	filter := bson.M{
 		"id":     threadId,
 		"chatId": chatId,
 	}
@@ -29,10 +30,10 @@ func GetTeamById(chatId, threadId string) (*models.Team, error) {
 	var team models.Team
 	err := collection.FindOne(ctx, filter).Decode(&team)
 
-	if err == mongo.ErrNoDocuments {
-		return nil, nil
-	}
 	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
 		return nil, err
 	}
 

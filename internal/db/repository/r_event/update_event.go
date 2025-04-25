@@ -16,11 +16,16 @@ func UpdateEvent(event *models.Event) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// создаём фильтр
+	filter := bson.M{
+		"id": event.ID,
+	}
+
 	// получаем коллекцию
 	collection := db.DB.Collection("events")
 
 	// замена события в бд
-	_, err := collection.ReplaceOne(ctx, bson.M{"id": event.ID}, event)
+	_, err := collection.ReplaceOne(ctx, filter, event)
 
 	return err
 }

@@ -15,8 +15,11 @@ func AddEvent(event *models.Event) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// получаем коллекцию
+	collection := db.DB.Collection("events")
+
 	// вставляем элемент в коллекцию
-	_, err := db.DB.Collection("events").InsertOne(ctx, event)
+	_, err := collection.InsertOne(ctx, event)
 
 	return err
 }

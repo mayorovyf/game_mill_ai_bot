@@ -17,11 +17,22 @@ func GetEventById(eventID string) (*models.Event, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// создаём фильтр
+	filter := bson.M{
+		"id": eventID,
+	}
+
+	// получаем коллекцию
+	collection := db.DB.Collection("events")
+
 	// поиск события в бд
 	var event models.Event
-	err := db.DB.Collection("events").FindOne(ctx, bson.M{"id": eventID}).Decode(&event)
+	err := collection.FindOne(ctx, filter).Decode(&event)
 
-	if err == mongo.ErrNoDocuments {
+	if err != nil {
+		if err == mongo.ErrNoDocuments {
+			return nil, nil
+		}
 		return nil, err
 	}
 
