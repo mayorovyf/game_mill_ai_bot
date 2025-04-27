@@ -1,6 +1,7 @@
 package main_handlers
 
 import (
+	"game_mill_ai_bot/internal/services/response_services"
 	"game_mill_ai_bot/internal/services/user_services"
 	"gopkg.in/telebot.v3"
 )
@@ -12,8 +13,9 @@ func StartHandler(c telebot.Context) error {
 
 	response := user_services.CreateUser(c.Sender())
 
-	if response.VisibleToUser {
-		return c.Reply(response.Description)
+	message := response_services.FormatMessage(response)
+	if message != "" {
+		return c.Reply(message)
 	}
 
 	return nil
