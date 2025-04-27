@@ -26,6 +26,7 @@ func CreateUser(u *telebot.User) models.Response {
 			UserDetails:     "Не удалось проверить, зарегистрирован ли пользователь.",
 			InternalDetails: err.Error(),
 			MinVisibleMode:  config.TestMode,
+			VisibleToUser:   true,
 		}
 	}
 
@@ -33,8 +34,9 @@ func CreateUser(u *telebot.User) models.Response {
 		return models.Response{
 			Level:          models.LevelInfo,
 			Description:    "Вы уже зарегистрированы.",
-			UserDetails:    "Успешно",
+			UserDetails:    "Вы уже нажимали /start в этом боте",
 			MinVisibleMode: config.TestMode,
+			VisibleToUser:  true,
 		}
 	}
 
@@ -46,6 +48,7 @@ func CreateUser(u *telebot.User) models.Response {
 			UserDetails:     "Не удалось зарегистрировать пользователя.",
 			InternalDetails: err.Error(),
 			MinVisibleMode:  config.DevMode,
+			VisibleToUser:   true,
 		}
 	}
 
@@ -54,5 +57,6 @@ func CreateUser(u *telebot.User) models.Response {
 		Description:    "Добро пожаловать!",
 		UserDetails:    "Пользователь успешно зарегистрирован.",
 		MinVisibleMode: config.ProdMode,
+		VisibleToUser:  true,
 	}
 }

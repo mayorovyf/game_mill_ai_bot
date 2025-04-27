@@ -15,6 +15,6 @@ type Response struct {
 	Description     string
 	UserDetails     string
 	InternalDetails string
-	VisibleToUser   bool
 	MinVisibleMode  config.Mode
+	VisibleToUser   bool
 }
