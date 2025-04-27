@@ -1,5 +1,7 @@
 package models
 
+import "game_mill_ai_bot/internal/config"
+
 type ResponseLevel string
 
 const (
@@ -9,8 +11,10 @@ const (
 )
 
 type Response struct {
-	Code          int
-	Level         ResponseLevel
-	Description   string
-	VisibleToUser bool
+	Level           ResponseLevel
+	Description     string
+	UserDetails     string
+	InternalDetails string
+	VisibleToUser   bool
+	MinVisibleMode  config.Mode
 }

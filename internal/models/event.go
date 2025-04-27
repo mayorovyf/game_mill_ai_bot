@@ -1,7 +1,9 @@
+// internal/models/event.go
 package models
 
 import "time"
 
+// структура события
 type Event struct {
 	ID           string    `bson:"id"`
 	ChatID       string    `bson:"chat_id"`
