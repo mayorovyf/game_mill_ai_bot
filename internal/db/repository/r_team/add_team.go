@@ -1,4 +1,4 @@
-// internal/db/repository/r_team/create_team.go
+// internal/db/repository/r_team/add_team.go
 package r_team
 
 import (
@@ -9,7 +9,7 @@ import (
 )
 
 // создание команды
-func CreateTeam(team models.Team) error {
+func AddTeam(team models.Team) error {
 
 	// ограничиваем запрос к бд в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)

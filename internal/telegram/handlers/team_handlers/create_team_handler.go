@@ -36,7 +36,7 @@ func CreateTeamHandler(c telebot.Context) error {
 		Lvl:     1, // стартовый уровень
 	}
 
-	err = r_team.CreateTeam(team)
+	err = r_team.AddTeam(team)
 	if err != nil {
 		return c.Reply("Ошибка при создании команды: " + err.Error())
 	}

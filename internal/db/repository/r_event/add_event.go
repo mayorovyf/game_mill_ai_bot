@@ -1,4 +1,4 @@
-// internal/db/repository/r_event/create_event.go
+// internal/db/repository/r_event/add_event.go
 package r_event
 
 import (

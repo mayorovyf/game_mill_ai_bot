@@ -9,7 +9,7 @@ import (
 )
 
 // добавляем пользователя
-func CreateUser(user models.User) error {
+func AddUser(user models.User) error {
 
 	// ограничиваем запрос к бд в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
