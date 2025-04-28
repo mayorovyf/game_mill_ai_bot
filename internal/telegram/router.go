@@ -30,7 +30,15 @@ func LoadTgRoutes() {
 	bot.Handle("/add_to_team", team_handlers.AddToTeamHandler)
 
 	// события
-	bot.Handle("/create_event", event_handlers.CreateEventHandler)
-	bot.Handle("/set_event", event_handlers.SetEventFieldHandler)
-	bot.Handle("/event_info", event_handlers.EventInfoHandler)
+	bot.Handle("/newevent", event_handlers.NewEventHandler)
+	bot.Handle("/set", event_handlers.SetHandler)
+	bot.Handle("/events", event_handlers.ListEventsHandler)
+	bot.Handle("/showevent", event_handlers.ShowEventHandler)
+	bot.Handle("/delete", event_handlers.DeleteEventHandler)
+	bot.Handle("/subscribe", event_handlers.SubscribeHandler)
+	bot.Handle("/unsubscribe", event_handlers.UnsubscribeHandler)
+	bot.Handle("/sethelp", event_handlers.SetHelpHandler)
+	bot.Handle("/ready", event_handlers.ReadyEventHandler)
+	bot.Handle("/eventhelp", event_handlers.EventHelpHandler)
+
 }

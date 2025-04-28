@@ -35,6 +35,5 @@ func LoadTgBot() {
 	log.Println("Уведомитель запущен...")
 
 	notifier.StartEventNotifier(bot)
-
 	bot.Start()
 }
