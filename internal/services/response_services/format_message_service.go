@@ -11,7 +11,7 @@ import (
 // формируем сообщение в зависимости от режима
 func FormatMessage(resp models.Response) string {
 	// выдаём пустую строку в случае если сообщение не видно пользователю или не подходящий режим запуска
-	if !resp.VisibleToUser || mode_utils.ModeOrder(config.CurrentMode) > mode_utils.ModeOrder(resp.MinVisibleMode) {
+	if !resp.VisibleToUser || mode_utils.ModeOrder(config.CurrentMode) < mode_utils.ModeOrder(resp.MinVisibleMode) {
 		return ""
 	}
 

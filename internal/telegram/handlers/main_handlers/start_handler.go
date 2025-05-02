@@ -1,3 +1,4 @@
+// internal/telegram/handlers/main_handlers/start_handler.go
 package main_handlers
 
 import (
@@ -7,6 +8,7 @@ import (
 	"gopkg.in/telebot.v3"
 )
 
+// обработчик start
 func StartHandler(c telebot.Context) error {
 	if !chat_services.IsPrivateChat(c) {
 		return c.Reply("Эта команда работает только в @" + c.Bot().Me.Username)

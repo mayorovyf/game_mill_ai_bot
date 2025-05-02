@@ -1,4 +1,4 @@
-// internal/db/repository/r_event/update_event.go
+// internal/db/repository/r_event/replace_event.go
 package r_event
 
 import (
@@ -10,15 +10,19 @@ import (
 )
 
 // заменяем старое событие на новое с сохранением id
-func UpdateEvent(event *models.Event) error {
-	
+func ReplaceEvent(event *models.Event) error {
+
+	// ограничиваем запрос в 5 сек
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
+	// получаем коллекцию
 	collection := db.DB.Collection("events")
 
+	// создаём фильтр
 	filter := bson.M{"global_id": event.GlobalID}
 
+	// заменяем событие
 	_, err := collection.ReplaceOne(ctx, filter, event)
 
 	return err

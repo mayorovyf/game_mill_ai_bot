@@ -21,7 +21,7 @@ type Event struct {
 	StartTime     time.Time       `bson:"start_time"`
 	ReminderMins  []int           `bson:"reminder_mins"`
 	Started       bool            `bson:"started"`
-	Status        EventStatus     `bson:"status"`
+	Status        EventStatus     `bson:"event_status"`
 	ChatID        int64           `bson:"chat_id"`
 	TopicID       *int64          `bson:"topic_id,omitempty"`
 	Subscribers   []int64         `bson:"subscribers"`

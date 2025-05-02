@@ -7,12 +7,12 @@ import "game_mill_ai_bot/internal/config"
 func ModeOrder(mode config.Mode) int {
 	switch mode {
 	case config.DevMode:
-		return 1
-	case config.TestMode:
-		return 2
-	case config.ProdMode:
-		return 3
-	default:
 		return 99
+	case config.TestMode:
+		return 98
+	case config.ProdMode:
+		return 97
+	default:
+		return 1
 	}
 }

@@ -1,7 +1,8 @@
 package event_handlers
 
 import (
-	"game_mill_ai_bot/internal/services/event_services"
+	"game_mill_ai_bot/internal/services/event_services/event_status"
+	"game_mill_ai_bot/internal/services/response_services"
 	"gopkg.in/telebot.v3"
 	"strconv"
 	"strings"
@@ -12,13 +13,18 @@ func ReadyEventHandler(c telebot.Context) error {
 	if len(args) < 1 {
 		return c.Reply("Пример: /ready <id>")
 	}
+
 	localID, err := strconv.Atoi(args[0])
 	if err != nil {
 		return c.Reply("ID должен быть числом")
 	}
-	err = event_services.SetReady(c.Sender().ID, localID)
-	if err != nil {
-		return c.Reply("Ошибка: " + err.Error())
+
+	response := event_status.SetReadyService(c.Sender().ID, localID)
+	message := response_services.FormatMessage(response)
+
+	if message != "" {
+		return c.Reply(message)
 	}
-	return c.Reply("Событие опубликовано и теперь активно.")
+
+	return nil
 }
