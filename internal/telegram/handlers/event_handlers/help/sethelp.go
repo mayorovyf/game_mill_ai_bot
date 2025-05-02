@@ -1,11 +1,19 @@
 package help
 
 import (
+	"game_mill_ai_bot/internal/models"
+	"game_mill_ai_bot/internal/services/chat_services"
 	"gopkg.in/telebot.v3"
 	"strings"
 )
 
 func SetHelpHandler(c telebot.Context) error {
+
+	response := chat_services.SyncChat(c.Chat())
+	if response.Level == models.LevelError {
+		return c.Reply(response.UserDetails)
+	}
+
 	helpText := strings.TrimSpace(`
 <b>️ Справка по команде /set:</b>
 

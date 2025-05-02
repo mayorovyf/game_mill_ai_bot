@@ -2,11 +2,19 @@ package user_handlers
 
 import (
 	"game_mill_ai_bot/internal/db/repository/r_user"
+	"game_mill_ai_bot/internal/models"
+	"game_mill_ai_bot/internal/services/chat_services"
 	"gopkg.in/telebot.v3"
 	"strconv"
 )
 
 func ProfileHandler(c telebot.Context) error {
+
+	response := chat_services.SyncChat(c.Chat())
+	if response.Level == models.LevelError {
+		return c.Reply(response.UserDetails)
+	}
+
 	message := c.Message()
 
 	if c.Chat().Type != telebot.ChatSuperGroup {

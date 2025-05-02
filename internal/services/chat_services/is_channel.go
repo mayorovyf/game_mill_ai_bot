@@ -1,8 +1,0 @@
-package chat_services
-
-import "gopkg.in/telebot.v3"
-
-// проверяем является ли этот чат каналом
-func IsChannel(c telebot.Context) bool {
-	return c.Chat().Type == telebot.ChatChannel
-}

@@ -1,6 +1,8 @@
 package event_handlers
 
 import (
+	"game_mill_ai_bot/internal/models"
+	"game_mill_ai_bot/internal/services/chat_services"
 	"game_mill_ai_bot/internal/services/event_services/event_status"
 	"game_mill_ai_bot/internal/services/response_services"
 	"gopkg.in/telebot.v3"
@@ -9,6 +11,12 @@ import (
 )
 
 func ReadyEventHandler(c telebot.Context) error {
+
+	response := chat_services.SyncChat(c.Chat())
+	if response.Level == models.LevelError {
+		return c.Reply(response.UserDetails)
+	}
+
 	args := strings.Fields(c.Message().Payload)
 	if len(args) < 1 {
 		return c.Reply("Пример: /ready <id>")
@@ -19,7 +27,7 @@ func ReadyEventHandler(c telebot.Context) error {
 		return c.Reply("ID должен быть числом")
 	}
 
-	response := event_status.SetReadyService(c.Sender().ID, localID)
+	response = event_status.SetReadyService(c.Sender().ID, localID)
 	message := response_services.FormatMessage(response)
 
 	if message != "" {
